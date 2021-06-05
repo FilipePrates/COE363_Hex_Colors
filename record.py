@@ -4,6 +4,7 @@ from sys import byteorder
 import copy
 import pyaudio
 import wave
+import time 
 
 THRESHOLD = 5000
 CHUNK_SIZE = 1024
@@ -54,7 +55,8 @@ def record():
     silent_chunks = 0
     audio_started = False
     data_all = array('h')
-
+    print('rec..')
+    count=0
     while True:
         data_chunk = array('h', stream.read(CHUNK_SIZE))
         if byteorder == 'big':
@@ -69,8 +71,9 @@ def record():
                     break
             else:
                 silent_chunks = 0
-        elif not silent:
+        elif not silent or count > 10000000000000000:
             audio_started = True
+        count+=1
 
     sample_width = p.get_sample_size(FORMAT)
     #stream.stop_stream()
@@ -83,6 +86,7 @@ def record():
     return sample_width, data_all
 
 def recordToFile(path):
+    print('rtF')
     sample_width, data = record()
     wave_file = wave.open(path, 'wb')
     wave_file.setnchannels(CHANNELS)

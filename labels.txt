@@ -1,0 +1,4 @@
+Vermelho
+Verde
+Azul
+Troca
